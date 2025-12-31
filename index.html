@@ -40,14 +40,14 @@
     main { padding-bottom: env(safe-area-inset-bottom); }
   </style>
 
-  <!-- 依赖映射 -->
+  <!-- 依赖映射：移除冗余映射，确保 react-dom/client 正确解析 -->
   <script type="importmap">
 {
   "imports": {
-    "react": "https://esm.sh/react@^19.2.3",
-    "react-dom": "https://esm.sh/react-dom@^19.2.3",
-    "react-dom/client": "https://esm.sh/react-dom@^19.2.3/client",
-    "@google/genai": "https://esm.sh/@google/genai@^1.34.0",
+    "react": "https://esm.sh/react@19.0.0",
+    "react-dom": "https://esm.sh/react-dom@19.0.0",
+    "react-dom/client": "https://esm.sh/react-dom@19.0.0/client",
+    "@google/genai": "https://esm.sh/@google/genai@1.3.0",
     "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
     "react/": "https://esm.sh/react@^19.2.3/"
   }
@@ -56,10 +56,10 @@
 </head>
 <body>
   <div id="root"></div>
-  <!-- 显式引入入口模块 -->
-  <script type="module" src="./index.tsx"></script>
+  <!-- 注意：根据系统规范，index.tsx 会被自动导入，无需手动添加 <script src="./index.tsx"> -->
   <script>
-    if ('serviceWorker' in navigator) {
+    // 仅在非本地开发环境注册 Service Worker，避免开发干扰
+    if ('serviceWorker' in navigator && window.location.protocol === 'https:') {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('./sw.js')
           .then(reg => console.log('CipherGuard 离线引擎就绪'))

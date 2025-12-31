@@ -1,8 +1,8 @@
 
 import React, { useState, useEffect } from 'react';
-import { AppTab } from './types.ts';
-import { generateECCKeyPair, encryptFile, decryptFile } from './cryptoUtils.ts';
-import { getSecurityAdvise } from './services/geminiService.ts';
+import { AppTab } from './types';
+import { generateECCKeyPair, encryptFile, decryptFile } from './cryptoUtils';
+import { getSecurityAdvise } from './services/geminiService';
 
 // --- 图标组件 ---
 const LockIcon = () => (
@@ -125,17 +125,17 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center p-4 md:p-8 max-w-screen-xl mx-auto">
+    <div className="min-h-screen flex flex-col items-center p-4 md:p-8 max-w-screen-xl mx-auto text-slate-200">
       {/* 头部 */}
       <header className="w-full max-w-5xl flex flex-col md:flex-row justify-between items-center mb-8 gap-6">
         <div className="flex items-center gap-4">
-          <div className="bg-indigo-600 p-3 rounded-2xl shadow-indigo-500/30 shadow-xl">
+          <div className="bg-indigo-600 p-3 rounded-2xl shadow-indigo-500/30 shadow-xl text-white">
             <ShieldIcon />
           </div>
           <div>
             <div className="flex items-center gap-2 flex-wrap">
                <h1 className="text-2xl md:text-3xl font-bold gradient-text">CipherGuard ECC</h1>
-               <span className="px-2 py-0.5 bg-emerald-500/20 text-emerald-400 text-[10px] font-bold rounded border border-emerald-500/30 uppercase tracking-tighter">
+               <span className="px-2 py-0.5 bg-emerald-500/20 text-emerald-400 text-[10px] font-bold rounded border border-emerald-500/30 uppercase tracking-tighter flex items-center gap-1">
                  <OfflineIcon /> 100% 离线运行
                </span>
             </div>
@@ -151,7 +151,7 @@ const App: React.FC = () => {
 
       {/* 主体 */}
       <main className="w-full max-w-5xl flex flex-col lg:flex-row gap-6">
-        <div className="flex-1 glass rounded-[2.5rem] p-6 md:p-10 relative flex flex-col">
+        <div className="flex-1 glass rounded-[2.5rem] p-6 md:p-10 relative flex flex-col min-h-[400px]">
           {status && (
             <div className={`absolute top-0 left-0 right-0 p-3 text-center text-sm font-medium z-20 ${
               status.type === 'error' ? 'bg-red-500/20 text-red-400 border-b border-red-500/30' : 
@@ -174,7 +174,7 @@ const App: React.FC = () => {
                       系统将生成一个唯一的 <strong>P-256 ECC</strong> 会话密钥对。公钥用于封锁文件，私钥将在加密后提供给您，请务必妥善保存。
                     </p>
                   </div>
-                  <button onClick={handleEncrypt} disabled={!encryptFileObj} className="w-full py-4 bg-indigo-600 hover:bg-indigo-500 disabled:bg-slate-800 disabled:text-slate-600 rounded-2xl font-bold text-lg transition-all mt-auto shadow-lg shadow-indigo-600/20">
+                  <button onClick={handleEncrypt} disabled={!encryptFileObj} className="w-full py-4 bg-indigo-600 hover:bg-indigo-500 disabled:bg-slate-800 disabled:text-slate-600 rounded-2xl font-bold text-lg transition-all mt-auto shadow-lg shadow-indigo-600/20 text-white">
                     开始加密
                   </button>
                 </>
@@ -192,7 +192,7 @@ const App: React.FC = () => {
                         <div className="bg-slate-950 p-4 rounded-xl border border-slate-700 font-mono text-xs break-all text-red-300 min-h-[100px] overflow-y-auto max-h-40 leading-relaxed">
                           {generatedPrivKey}
                         </div>
-                        <button onClick={() => copyToClipboard(generatedPrivKey)} className="absolute top-2 right-2 p-2 bg-slate-800 hover:bg-slate-700 rounded-lg border border-slate-600 transition-colors">
+                        <button onClick={() => copyToClipboard(generatedPrivKey)} className="absolute top-2 right-2 p-2 bg-slate-800 hover:bg-slate-700 rounded-lg border border-slate-600 transition-colors text-white">
                           <ClipboardIcon />
                         </button>
                       </div>
@@ -200,7 +200,7 @@ const App: React.FC = () => {
                   </div>
                   <div className="flex gap-3">
                     <button onClick={() => setGeneratedPrivKey(null)} className="flex-1 py-3 bg-slate-800 hover:bg-slate-700 rounded-xl font-semibold transition-all">新文件</button>
-                    <button onClick={() => { setActiveTab(AppTab.DECRYPT); setPrivateKeyInput(generatedPrivKey); }} className="flex-1 py-3 bg-indigo-600 hover:bg-indigo-500 rounded-xl font-semibold transition-all">去解密</button>
+                    <button onClick={() => { setActiveTab(AppTab.DECRYPT); setPrivateKeyInput(generatedPrivKey); }} className="flex-1 py-3 bg-indigo-600 hover:bg-indigo-500 rounded-xl font-semibold transition-all text-white">去解密</button>
                   </div>
                 </div>
               )}
@@ -215,10 +215,10 @@ const App: React.FC = () => {
                   value={privateKeyInput}
                   onChange={(e) => setPrivateKeyInput(e.target.value)}
                   placeholder="在此粘贴加密时提供的私钥..."
-                  className="w-full flex-1 min-h-[150px] bg-slate-950/50 border border-slate-700 rounded-2xl p-4 text-xs mono focus:ring-2 focus:ring-emerald-500 outline-none resize-none leading-relaxed"
+                  className="w-full flex-1 min-h-[150px] bg-slate-950/50 border border-slate-700 rounded-2xl p-4 text-xs mono focus:ring-2 focus:ring-emerald-500 outline-none resize-none leading-relaxed text-slate-200"
                 />
               </div>
-              <button onClick={handleDecrypt} disabled={!decryptFileObj || !privateKeyInput} className="w-full py-4 bg-emerald-600 hover:bg-emerald-500 disabled:bg-slate-800 disabled:text-slate-600 rounded-2xl font-bold text-lg transition-all mt-auto shadow-lg shadow-emerald-600/20">
+              <button onClick={handleDecrypt} disabled={!decryptFileObj || !privateKeyInput} className="w-full py-4 bg-emerald-600 hover:bg-emerald-500 disabled:bg-slate-800 disabled:text-slate-600 rounded-2xl font-bold text-lg transition-all mt-auto shadow-lg shadow-emerald-600/20 text-white">
                 立即解密
               </button>
             </div>
