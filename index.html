@@ -1,46 +1,37 @@
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>CipherGuard ECC - 离线加密文件保险箱</title>
   
-  <!-- PWA 元数据 -->
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#0f172a">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="CipherGuard">
-  <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/2092/2092663.png">
-
-  <!-- 样式增强 -->
+  
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  
   <style>
     body {
       font-family: 'Inter', sans-serif;
       background-color: #0f172a;
       color: #f8fafc;
-      -webkit-tap-highlight-color: transparent;
-      overscroll-behavior-y: contain;
+      margin: 0;
     }
-    .mono { font-family: 'JetBrains Mono', monospace; }
     .glass {
-      background: rgba(30, 41, 59, 0.75);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(30, 41, 59, 0.7);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
     }
     .gradient-text {
       background: linear-gradient(135deg, #818cf8 0%, #c084fc 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
-    main { padding-bottom: env(safe-area-inset-bottom); }
   </style>
 
-  <!-- 依赖映射：移除冗余映射，确保 react-dom/client 正确解析 -->
   <script type="importmap">
 {
   "imports": {
@@ -56,14 +47,11 @@
 </head>
 <body>
   <div id="root"></div>
-  <!-- 注意：根据系统规范，index.tsx 会被自动导入，无需手动添加 <script src="./index.tsx"> -->
   <script>
-    // 仅在非本地开发环境注册 Service Worker，避免开发干扰
+    // 注册 Service Worker 以支持离线
     if ('serviceWorker' in navigator && window.location.protocol === 'https:') {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js')
-          .then(reg => console.log('CipherGuard 离线引擎就绪'))
-          .catch(err => console.log('离线注册失败:', err));
+        navigator.serviceWorker.register('./sw.js').catch(() => {});
       });
     }
   </script>
