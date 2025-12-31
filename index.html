@@ -37,7 +37,6 @@
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
-    /* 针对作为 App 运行时的底部安全区域适配 */
     main { padding-bottom: env(safe-area-inset-bottom); }
   </style>
 
@@ -57,8 +56,9 @@
 </head>
 <body>
   <div id="root"></div>
+  <!-- 显式引入入口模块 -->
+  <script type="module" src="./index.tsx"></script>
   <script>
-    // 注册 Service Worker 实现离线运行
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('./sw.js')

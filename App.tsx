@@ -1,8 +1,8 @@
 
 import React, { useState, useEffect } from 'react';
-import { AppTab } from './types';
-import { generateECCKeyPair, encryptFile, decryptFile } from './cryptoUtils';
-import { getSecurityAdvise } from './services/geminiService';
+import { AppTab } from './types.ts';
+import { generateECCKeyPair, encryptFile, decryptFile } from './cryptoUtils.ts';
+import { getSecurityAdvise } from './services/geminiService.ts';
 
 // --- 图标组件 ---
 const LockIcon = () => (
