@@ -1,14 +1,24 @@
 
 import { GoogleGenAI } from "@google/genai";
 
-const ai = process.env.API_KEY ? new GoogleGenAI({ apiKey: process.env.API_KEY }) : null;
+// 安全检查 process 环境，防止在标准浏览器环境抛出 ReferenceError
+const getApiKey = () => {
+  try {
+    return (typeof process !== 'undefined' && process.env?.API_KEY) || null;
+  } catch (e) {
+    return null;
+  }
+};
+
+const apiKey = getApiKey();
+const ai = apiKey ? new GoogleGenAI({ apiKey }) : null;
 
 const STATIC_TIPS = [
-  "ECC P-256 provides a high security margin with shorter keys than RSA, making it ideal for mobile and web environments.",
-  "Never reuse the same private key for multiple different types of high-value documents if you suspect key compromise.",
-  "AES-GCM is an authenticated encryption mode that provides both confidentiality and data integrity.",
-  "Your private key is the only way to recover your data. If lost, the file is gone forever.",
-  "Browser-local encryption ensures that even if our website is down, you can use a saved copy to decrypt your files."
+  "ECC P-256 在提供与 RSA-3072 相当的安全性时，密钥长度更短，效率更高。",
+  "AES-GCM 是一种经过验证的加密模式，同时提供机密性和完整性校验。",
+  "私钥是恢复数据的唯一凭证。一旦丢失，加密文件将无法挽回。",
+  "本工具的所有核心加解密逻辑均在浏览器本地运行，不经过任何服务器。",
+  "建议在离线环境（如飞行模式）下进行高机密文件的处理。"
 ];
 
 export const getSecurityAdvise = async (topic: string) => {
@@ -19,14 +29,14 @@ export const getSecurityAdvise = async (topic: string) => {
   try {
     const response = await ai.models.generateContent({
       model: 'gemini-3-flash-preview',
-      contents: `Provide a concise, expert security tip about: ${topic}. Focus on Elliptic Curve Cryptography (ECC) and file safety. Keep it under 60 words. Mention that this tool works offline.`,
+      contents: `提供一个关于 ${topic} 的简短安全建议。侧重于 ECC 加密和文件安全。字数控制在50字以内。说明此工具可离线工作。`,
       config: {
         temperature: 0.7,
       }
     });
     return response.text || STATIC_TIPS[0];
   } catch (err) {
-    console.debug("Gemini connection skipped or failed, using local tip.");
+    console.warn("AI 建议获取失败，使用本地预设提示。");
     return STATIC_TIPS[Math.floor(Math.random() * STATIC_TIPS.length)];
   }
 };
