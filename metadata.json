@@ -1,0 +1,5 @@
+{
+  "name": "CipherGuard ECC",
+  "description": "A 100% private, browser-local ECC file encryption tool. Uses ECDH and AES-GCM for high-security file protection. No data or keys ever leave your device.",
+  "requestFramePermissions": []
+}
